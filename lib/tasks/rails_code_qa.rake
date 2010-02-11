@@ -1,5 +1,5 @@
-desc 'Run all RAQA tests'
-task :raqa do
+desc 'Run all Rails Code QA tests'
+task :rcqa do
   tasks = %w(raqa:test)
   errors = tasks.collect do |task|
     begin 
@@ -13,10 +13,10 @@ task :raqa do
 end
 
 
-namespace :raqa do
+namespace :rcqa do
   task :default => [:test]
 
-  desc "Run Rails Automated Quality Assurance tests"
+  desc "Run Rails Code QA tests"
   task(:test) do
     Rake::Task["test:units"].invoke
   end
