@@ -1,3 +1,8 @@
 RAQA -- Rails Automated Quality Assurance
 
+Currently runs unit, functional, and integration tests with rcov for code coverage. 
+
+Usage:
+rake rcqa:test
+
 Copyright (c) 2009-2010 Nathan Humbert, released under the MIT license
