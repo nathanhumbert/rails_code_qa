@@ -1,54 +1,45 @@
 require 'rcov/rcovtask'
 
 desc 'Run all Rails Code QA tests'
-task :rcqa do
-  tasks = %w(raqa:test)
-  errors = tasks.collect do |task|
-    begin 
-      Rake::Task[task].invoke
-      nil
-    rescue => e
-      task
-    end
-  end.compact
-  abort "Errors running #{errors * ', '}!" if errors.any?
-end
+task :rcqa => ["rcqa:default"]
 
 
 namespace :rcqa do
   SECTIONS = {
-    "units" => "app\/models|app\/helpers|lib",
-    "functionals" => "app\/controllers"
+    "units" => {:folders => "app\/models|app\/helpers|lib"},
+    "functionals" => {:folders => "app\/controllers"},
+    "integration" => {}
   } 
+
   task :default => [:test]
 
-  desc "Run Rails Code QA tests"
+  desc "Run all Rails tests with rcov on units and functionals"
   task(:test) do
-    SECTIONS.each do |section_name, section_folders|
+    SECTIONS.each do |section_name, section|
       puts "#################################################"
       puts "Running #{section_name.singularize} tests"
       puts "#################################################"
-      Rake::Task["rcqa:rcov:#{section_name}"].invoke
+      Rake::Task["rcqa:#{section_name}"].invoke
+      unless section[:folders].nil?
+        puts "HTML output can be found at:" 
+        puts "file:///#{File.join([Rails.root, 'coverage', section_name, 'index.html'])}"
+      end
+      puts "\n\n"
     end
-    
-    puts "#################################################"
-    puts "Running integration tests"
-    puts "#################################################"
-    Rake::Task["test:integration"].invoke
   end
 
-  namespace :rcov do
-    SECTIONS.each do |section_name, section_folders|
+  SECTIONS.each do |section_name, section|
+    unless section[:folders].nil?
       Rcov::RcovTask.new("#{section_name}") do |t|
         t.libs << "test"
         t.test_files = Dir["test/#{section_name.singularize}/**/*_test.rb"]
-        t.verbose = true
-        t.rcov_opts = ["--html", "--text-report", "--exclude '^(?!(#{section_folders}))'"]
+        t.rcov_opts = ["--html", "--text-report", "--exclude '^(?!(#{section[:folders]}))'"]
         t.output_dir = "coverage/#{section_name}"
       end
     end
   end
 
+  task :integration => ["test:integration"]
 end
 
 
