@@ -1,4 +1,6 @@
 require 'rcov/rcovtask'
+require 'task_helpers'
+require 'flog'
 
 desc 'Run all Rails Code QA tests'
 task :rcqa => ["rcqa:default"]
@@ -11,7 +13,7 @@ namespace :rcqa do
     "integration" => {}
   } 
 
-  task :default => [:test]
+  task :default => [:test, :flog, :flay]
 
   desc "Run all Rails tests with rcov on units and functionals"
   task(:test) do
@@ -39,6 +41,28 @@ namespace :rcqa do
   end
 
   task :integration => ["test:integration"]
+
+  desc "Run Flog"
+  task(:flog) do 
+    flog_runner(30, ['app/models', 'app/helpers', 'lib']) 
+    flog_runner(45, ['app/controllers'])
+  end
+
+  desc "Run Flay"
+  task(:flay) do
+    require 'flay'
+    puts "=============================================="
+    puts "Flay output: "
+    threshold = 25
+    flay = Flay.new({:fuzzy => false, :verbose => false, :mass => threshold})
+    flay.process(*Flay.expand_dirs_to_files(['app/models', 'app/helpers', 'lib']))
+    flay.report
+
+    puts "#{flay.masses.size} chunks of code have a duplicate mass > #{threshold}" unless flay.masses.empty?
+    puts "=============================================="
+    puts ""
+  end
+
 end
 
 

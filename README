@@ -1,8 +1,24 @@
-RAQA -- Rails Automated Quality Assurance
+Rails Code QA
 
-Currently runs unit, functional, and integration tests with rcov for code coverage. 
+Currently does the following:
+  - Runs unit and functional tests with rcov for code coverage 
+  - Runs integration tests
+  - Runs Flog
+  - Runs Flay
 
 Usage:
-rake rcqa:test
+
+Everything:
+  rake rcqa
+
+Just tests and coverage:
+  rake rcqa:test
+
+Just Flog:
+  rake rcqa:flog
+
+Just Flay:
+  rake rcqa:flay
+
 
 Copyright (c) 2009-2010 Nathan Humbert, released under the MIT license
