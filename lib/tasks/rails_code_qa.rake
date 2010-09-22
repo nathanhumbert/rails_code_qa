@@ -9,7 +9,7 @@ task :rcqa => ["rcqa:default"]
 namespace :rcqa do
   SECTIONS = {
     "units" => {:folders => "app\/models|app\/helpers|lib"},
-    "functionals" => {:folders => "app\/controllers"},
+    "functionals" => {:folders => "app\/controllers|app\/mailers"},
     "integration" => {}
   } 
 
