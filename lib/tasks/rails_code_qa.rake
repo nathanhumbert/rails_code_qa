@@ -22,20 +22,29 @@ namespace :rcqa do
       puts "Running #{section_name.singularize} tests"
       puts "#################################################"
       Rake::Task["rcqa:#{section_name}"].invoke
-      unless section[:folders].nil?
-        puts "HTML output: <file:///#{File.join([Rails.root, 'coverage', section_name, 'index.html'])}>"
+      unless '1.9'.respond_to?(:encoding)
+        unless section[:folders].nil?
+          puts "HTML output: <file:///#{File.join([Rails.root, 'coverage', section_name, 'index.html'])}>"
+        end
+        puts "\n\n"
       end
-      puts "\n\n"
+    end
+    if '1.9'.respond_to?(:encoding)
+      puts "Coverage output: <file:///#{File.join([Rails.root, 'coverage', 'index.html'])}>"
     end
   end
 
   SECTIONS.each do |section_name, section|
     unless section[:folders].nil?
-      Rcov::RcovTask.new("#{section_name}") do |t|
-        t.libs << "test"
-        t.test_files = Dir["test/#{section_name.singularize}/**/*_test.rb"]
-        t.rcov_opts = ["--html", "--text-report", "--exclude '^(?!(#{section[:folders]}))'"]
-        t.output_dir = "coverage/#{section_name}"
+      if '1.9'.respond_to?(:encoding)
+        task section_name.to_sym => ["test:#{section_name}"]
+      else
+        Rcov::RcovTask.new("#{section_name}") do |t|
+          t.libs << "test"
+          t.test_files = Dir["test/#{section_name.singularize}/**/*_test.rb"]
+          t.rcov_opts = ["--html", "--text-report", "--exclude '^(?!(#{section[:folders]}))'"]
+          t.output_dir = "coverage/#{section_name}"
+        end
       end
     end
   end

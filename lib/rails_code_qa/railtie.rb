@@ -8,4 +8,5 @@ module RailsCodeQa
     end
 
   end
+
 end
