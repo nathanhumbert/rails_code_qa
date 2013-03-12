@@ -37,4 +37,4 @@ No longer supported
 
 
 
-Copyright (c) 2009-2011 Nathan Humbert, released under the MIT license
+Copyright (c) 2009-2013 Nathan Humbert, released under the MIT license
