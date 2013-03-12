@@ -2,12 +2,6 @@
 
 ## Installation
 
-### Ruby 1.8.x
-Add the following to your gemfile
-
-	gem 'rails_code_qa'
-
-### Ruby 1.9.x
 Add the following to your gemfile
 
 	gem 'rails_code_qa'
@@ -21,23 +15,19 @@ Add the following to your test/test_helper.rb file
 
 	#Everything:
 	rake rcqa
-	
+
 	#Just tests and coverage:
 	rake rcqa:test
-	
+
 	#Just Flog:
 	rake rcqa:flog
-	
+
 	#Just Flay:
 	rake rcqa:flay
 
 ## Features
 ### Ruby 1.8.x
-
-* Runs unit and functional tests with rcov for code coverage 
-* Runs integration tests
-* Runs Flog
-* Runs Flay
+No longer supported
 
 ### Ruby 1.9.x
 
